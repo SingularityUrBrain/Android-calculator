@@ -1,19 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:columnCount="4"
-    android:rowCount="7">
+    android:rowCount="3">
 
     <ScrollView
         android:id="@+id/scrollView"
         android:background="@color/colorView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_rowWeight="3.5"
+        android:layout_rowWeight="0.5"
         android:layout_columnSpan="4"
-        android:scrollbars="none"
-        >
+        android:scrollbars="none">
         <TextView
             android:id="@+id/textView"
             android:overScrollMode="never"
@@ -23,12 +22,13 @@
             android:textAlignment="gravity"
             android:textSize="30sp" />
     </ScrollView>
+
     <EditText
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_columnSpan="4"
         android:layout_height="0dp"
-        android:layout_rowWeight="1"
+        android:layout_rowWeight="0.15"
         android:background="@color/colorView"
         android:textAlignment="textEnd"
         android:textColor="#000000"
@@ -39,115 +39,13 @@
         android:text="0"
         />
 
-    <Button
-        android:id="@+id/buttonC"
-        android:onClick="OnOpClick"
-        style="@style/ButtonCommonStyle"
-        android:background="@drawable/button_background"
-        android:text="C"
-        android:textColor="#FF5722" />
-
-    <Button
-        style="@style/ButtonCommonStyle"
-        android:onClick="OnOpClick"
-        android:background="@drawable/button_background"
-        android:text="⌫" />
-
-    <Button
-        style="@style/ButtonCommonStyle"
-        android:background="@drawable/button_background"
-        android:text="%" />
-
-    <Button
-        style="@style/ButtonCommonStyle"
-        android:onClick="OnOpClick"
-        android:background="@drawable/button_background"
-        android:text="÷" />
-
-    <Button
-        style="@style/ButtonCommonStyle"
-        android:background="@drawable/button_background"
-        android:text="7" />
-
-    <Button
-        style="@style/ButtonCommonStyle"
-        android:background="@drawable/button_background"
-        android:text="8" />
-
-    <Button
-        style="@style/ButtonCommonStyle"
-        android:background="@drawable/button_background"
-        android:text="9" />
-
-    <Button
-        style="@style/ButtonCommonStyle"
-        android:onClick="OnOpClick"
-        android:background="@drawable/button_background"
-        android:text="×" />
-
-    <Button
-        style="@style/ButtonCommonStyle"
-        android:background="@drawable/button_background"
-        android:text="4" />
-
-    <Button
-        style="@style/ButtonCommonStyle"
-        android:background="@drawable/button_background"
-        android:text="5" />
-
-    <Button
-        style="@style/ButtonCommonStyle"
-        android:background="@drawable/button_background"
-        android:text="6" />
-
-    <Button
-        style="@style/ButtonCommonStyle"
-        android:onClick="OnOpClick"
-        android:background="@drawable/button_background"
-        android:text="−" />
-
-    <Button
-        style="@style/ButtonCommonStyle"
-        android:background="@drawable/button_background"
-        android:text="1" />
-
-    <Button
-        style="@style/ButtonCommonStyle"
-        android:background="@drawable/button_background"
-        android:text="2" />
-
-    <Button
-        style="@style/ButtonCommonStyle"
-        android:background="@drawable/button_background"
-        android:text="3" />
-
-    <Button
-        style="@style/ButtonCommonStyle"
-        android:onClick="OnOpClick"
-        android:background="@drawable/button_background"
-        android:text="+" />
-
-    <Button
-        style="@style/ButtonCommonStyle"
-        android:background="@drawable/button_background"
-        android:text="sci"
-        android:textColor="#FF5722" />
-
-    <Button
-        style="@style/ButtonCommonStyle"
-        android:background="@drawable/button_background"
-        android:text="0" />
-
-    <Button
-        style="@style/ButtonCommonStyle"
-        android:background="@drawable/button_background"
-        android:text="." />
-
-    <Button
-        style="@style/ButtonCommonStyle"
-        android:onClick="OnOpClick"
-        android:background="#FF5722"
-        android:text="\="
-        android:textColor="#FFFFFF" />
+    <fragment
+        android:id="@+id/baseFragment"
+        android:layout_rowWeight="0.9"
+        android:layout_columnSpan="4"
+        android:layout_height="0dp"
+        android:name="com.nikita.lab.calculator.BaseFragment"
+        android:layout_width="match_parent"
+        tools:layout="@layout/fragment_base" />
 
 </GridLayout>

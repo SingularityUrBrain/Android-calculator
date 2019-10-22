@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="4"
+    android:rowCount="5">
+
+
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView2"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_rowWeight="0.45"-->
+<!--        android:layout_columnSpan="4"-->
+<!--        android:background="@color/colorView"-->
+<!--        android:gravity="end|bottom"-->
+<!--        android:textAlignment="gravity"-->
+<!--        android:textSize="30sp" />-->
+
+    <Button
+        style="@style/ButtonCommonStyle"
+        android:onClick="OnOpClick"
+        android:background="@drawable/button_background"
+        android:text="C"
+        android:textColor="#FF5722" />
+
+    <Button
+        style="@style/ButtonCommonStyle"
+        android:onClick="OnOpClick"
+        android:background="@drawable/button_background"
+        android:text="⌫" />
+
+    <Button
+        style="@style/ButtonCommonStyle"
+        android:background="@drawable/button_background"
+        android:text="%" />
+
+    <Button
+        style="@style/ButtonCommonStyle"
+        android:onClick="OnOpClick"
+        android:background="@drawable/button_background"
+        android:text="÷" />
+
+    <Button
+        style="@style/ButtonCommonStyle"
+        android:background="@drawable/button_background"
+        android:onClick="OnNumberClick"
+        android:text="7" />
+
+    <Button
+        style="@style/ButtonCommonStyle"
+        android:background="@drawable/button_background"
+        android:onClick="OnNumberClick"
+        android:text="8" />
+
+    <Button
+        style="@style/ButtonCommonStyle"
+        android:background="@drawable/button_background"
+        android:onClick="OnNumberClick"
+        android:text="9" />
+
+    <Button
+        style="@style/ButtonCommonStyle"
+        android:onClick="OnOpClick"
+        android:background="@drawable/button_background"
+        android:text="×" />
+
+    <Button
+        style="@style/ButtonCommonStyle"
+        android:background="@drawable/button_background"
+        android:onClick="OnNumberClick"
+        android:text="4" />
+
+    <Button
+        style="@style/ButtonCommonStyle"
+        android:background="@drawable/button_background"
+        android:onClick="OnNumberClick"
+        android:text="5" />
+
+    <Button
+        style="@style/ButtonCommonStyle"
+        android:background="@drawable/button_background"
+        android:onClick="OnNumberClick"
+        android:text="6" />
+
+    <Button
+        style="@style/ButtonCommonStyle"
+        android:onClick="OnOpClick"
+        android:background="@drawable/button_background"
+        android:text="−" />
+
+    <Button
+        style="@style/ButtonCommonStyle"
+        android:background="@drawable/button_background"
+        android:onClick="OnNumberClick"
+        android:text="1" />
+
+    <Button
+        style="@style/ButtonCommonStyle"
+        android:background="@drawable/button_background"
+        android:onClick="OnNumberClick"
+        android:text="2" />
+
+    <Button
+        style="@style/ButtonCommonStyle"
+        android:background="@drawable/button_background"
+        android:onClick="OnNumberClick"
+        android:text="3" />
+
+    <Button
+        style="@style/ButtonCommonStyle"
+        android:background="@drawable/button_background"
+        android:onClick="OnOpClick"
+        android:text="+" />
+
+    <Button
+        style="@style/ButtonCommonStyle"
+        android:background="@drawable/button_background"
+        android:layout_columnSpan="2"
+        android:onClick="OnNumberClick"
+        android:text="0" />
+
+    <Button
+        style="@style/ButtonCommonStyle"
+        android:background="@drawable/button_background"
+        android:onClick="OnNumberClick"
+        android:text="." />
+
+    <Button
+        style="@style/ButtonCommonStyle"
+        android:onClick="OnOpClick"
+        android:background="#FF5722"
+        android:text="\="
+        android:textColor="#FFFFFF" />
+
+</GridLayout>
