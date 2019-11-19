@@ -1,6 +1,5 @@
 package com.nikita.lab.calculator;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -14,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -118,8 +116,12 @@ public class MainActivity extends AppCompatActivity {
                     result = new StringBuilder("0");
                     editText.setText("Invalid expression");
                 }
-                else
-                    result = new StringBuilder(Double.toString(res));
+                else{
+                    if(res % 1 == 0)
+                        result = new StringBuilder(Integer.toString((int)res));
+                    else
+                        result = new StringBuilder(Double.toString(res));
+                }
                 textView.append(editText.getText());
                 textView.append("\n");
                 StringBuilder res_text = new StringBuilder(result);
@@ -137,6 +139,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case "÷":
                         op_eval = "/";
+                        break;
+                    case "%":
+                        op_eval = "#";
                         break;
                     case "sin":
                         op_eval = op = "sin(";
@@ -193,10 +198,7 @@ public class MainActivity extends AppCompatActivity {
         else{
             editText.append(num);
         }
-        if (result.length() > 1 && result.charAt(result.length() - 1) == '/')
-            result.append(Double.toString(Double.parseDouble(num)));
-        else
-            result.append(num);
+        result.append(num);
     }
 
     public void OnSciClick(View view) {

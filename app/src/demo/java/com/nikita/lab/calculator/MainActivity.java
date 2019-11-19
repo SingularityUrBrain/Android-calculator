@@ -116,8 +116,12 @@ public class MainActivity extends AppCompatActivity {
                     result = new StringBuilder("0");
                     editText.setText("Invalid expression");
                 }
-                else
-                    result = new StringBuilder(Double.toString(res));
+                else {
+                    if(res % 1 == 0)
+                        result = new StringBuilder(Integer.toString((int)res));
+                    else
+                        result = new StringBuilder(Double.toString(res));
+                }
                 textView.append(editText.getText());
                 textView.append("\n");
                 StringBuilder res_text = new StringBuilder(result);
@@ -135,6 +139,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case "÷":
                         op_eval = "/";
+                        break;
+                    case "%":
+                        op_eval = "#";
                         break;
                     default:
                         op_eval = op;
@@ -170,10 +177,7 @@ public class MainActivity extends AppCompatActivity {
         else{
             editText.append(num);
         }
-        if (result.length() > 1 && result.charAt(result.length() - 1) == '/')
-            result.append(Double.toString(Double.parseDouble(num)));
-        else
-            result.append(num);
+        result.append(num);
     }
 
 }
