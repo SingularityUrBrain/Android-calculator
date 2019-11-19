@@ -1,6 +1,9 @@
 package com.nikita.lab.calculator;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,24 +14,17 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.commons.jexl2.Expression;
-import org.apache.commons.jexl2.JexlArithmetic;
-import org.apache.commons.jexl2.JexlContext;
-import org.apache.commons.jexl2.JexlEngine;
-import org.apache.commons.jexl2.MapContext;
-
-
-
-public class MainActivity extends AppCompatActivity implements BaseFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity {
 
     TextView textView;
     ScrollView mainScrollView;
     EditText editText;
+    Button delB;
 
+    boolean isClear = true;
     String PADDING = "\n\n\n\n\n";
-    //StringBuilder buff = new StringBuilder(PADDING);
-    StringBuilder result = new StringBuilder("0");
-    double answer;
+    StringBuilder result;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +34,18 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
         init();
     }
     private void init(){
+        result = new StringBuilder("0");
+
+        delB = findViewById(R.id.delB);
+        delB.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                EditText editText = findViewById(R.id.editText);
+                editText.setText("0");
+                isClear = true;
+                return true;
+            }
+        });
         textView = findViewById(R.id.textView);
         editText = findViewById(R.id.editText);
         mainScrollView = findViewById(R.id.scrollView);
@@ -51,12 +59,21 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
     }
 
     @Override
-    public void onFragmentInteraction(String link) {
-        BaseFragment fragment = (BaseFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.baseFragment);
-//        if (fragment != null && fragment.isInLayout()) {
-//            fragment.onAction(link);
-//        }
+    public void onSaveInstanceState(Bundle savedInstanceState){
+        savedInstanceState.putString("textView", textView.getText().toString());
+        savedInstanceState.putString("editText", editText.getText().toString());
+        savedInstanceState.putString("result", result.toString());
+        super.onSaveInstanceState(savedInstanceState);
+    }
+    //didn't work?
+    @Override
+    public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        String hist = savedInstanceState.getString("textView");
+        String expr = savedInstanceState.getString("editText");
+        result = new StringBuilder(savedInstanceState.getString("result", "0"));
+        textView.setText(hist);
+        editText.setText(expr);
     }
 
     public void OnOpClick(View view){
@@ -69,22 +86,37 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
                 editText.setText("0");
                 result.setLength(0);
                 result.append("0");
+                isClear = true;
                 break;
             case "⌫":
                 Editable txt = editText.getText();
-                editText.setText(txt.delete(txt.length() - 1, txt.length()));
-                result.setLength(result.length() - 1);
+                if (editText.length() > 0) {
+                    editText.setText(txt.delete(txt.length() - 1, txt.length()));
+                }
+                else
+                    editText.setText("0");
+                if (result.length() > 0)
+                    result.setLength(result.length() - 1);
+                else {
+                    result.append("0");
+                    isClear = true;
+                }
                 return;
             case "=":
-                JexlEngine jexl = new JexlEngine();
-                String jexlExp = result.toString();
-                Expression e = jexl.createExpression(jexlExp);
-                Object o = e.evaluate(null);
-                StringBuilder ans_str = new StringBuilder(o.toString());
-                result = new StringBuilder(ans_str);
+                if(result.indexOf("(") != -1 && result.indexOf(")") == -1)
+                    result.append(")");
+                double res = Calculator.exec(result.toString());
+                if (Double.isNaN(res))
+                {
+                    result = new StringBuilder("0");
+                    editText.setText("Invalid expression");
+                }
+                else
+                    result = new StringBuilder(Double.toString(res));
                 textView.append(editText.getText());
                 textView.append("\n");
-                editText.setText(ans_str.insert(0, "= "));
+                StringBuilder res_text = new StringBuilder(result);
+                editText.setText(res_text.insert(0, "= "));
                 break;
             default:
                 String op_eval;
@@ -98,33 +130,78 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
                     case "÷":
                         op_eval = "/";
                         break;
+                    case "sin":
+                        op_eval = op = "sin(";
+                        break;
+                    case "cos":
+                        op_eval = op = "cos(";
+                        break;
+                    case "tan":
+                        op_eval = op = "tan(";
+                        break;
+                    case "ln":
+                        op_eval = op = "ln(";
+                        break;
+                    case "log":
+                        op_eval = op = "log10(";
+                        break;
+                    case "√":
+                        op_eval = op = "sqrt(";
+                        break;
+                    case "\uD835\uDF0B":
+                        op_eval = "pi";
+                        break;
                     default:
                         op_eval = op;
                         break;
                 }
                 // TODO: change sign if sign in editText now else add sign
+                if (isClear)
+                {
+                    editText.setText(op);
+                    result.setLength(0);
+                    isClear = false;
+                }
+                else
+                {
+                    editText.append(op);
+                }
                 result.append(op_eval);
-                textView.append(editText.getText());
-                textView.append("\n");
-                editText.setText(op);
-                editText.append(" ");
                 break;
         }
 
-        //textView.setText(buff);
         mainScrollView.fullScroll(ScrollView.FOCUS_DOWN);
     }
     public void OnNumberClick(View view){
         Button button = (Button)view;
         String num = button.getText().toString();
-        if (result.charAt(0) == '0'){
+        if (isClear){
             textView.append(PADDING);
-            result.setLength(0);
             editText.setText(num);
+            isClear = false;
+            result.setLength(0);
         }
         else{
             editText.append(num);
         }
-        result.append(num);
+        if (result.length() > 1 && result.charAt(result.length() - 1) == '/')
+            result.append(Double.toString(Double.parseDouble(num)));
+        else
+            result.append(num);
+    }
+
+    public void OnSciClick(View view) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (findViewById(R.id.frm).getHeight() == 0)
+        {
+            Fragment sciFragment = new ScientificFragment();
+            transaction.add(R.id.frm, sciFragment);
+        }
+        else {
+            transaction.remove(getSupportFragmentManager().findFragmentById(R.id.frm));
+        }
+        transaction.commit();
+
+
     }
 }

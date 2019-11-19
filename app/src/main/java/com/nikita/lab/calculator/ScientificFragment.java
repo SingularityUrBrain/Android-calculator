@@ -2,50 +2,37 @@ package com.nikita.lab.calculator;
 
 import android.content.Context;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link BaseFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link BaseFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class BaseFragment extends Fragment {
-
+public class ScientificFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
 
     private String mParam1;
+    private String mParam2;
+
+    private OnFragmentInteractionListener mListener;
 
 
-    private final String PADDING = "\n\n\n\n\n";
-    //StringBuilder buff = new StringBuilder(PADDING);
-    private StringBuilder result = new StringBuilder("0");
-
-
-    public BaseFragment() {
+    public ScientificFragment() {
         // Required empty public constructor
     }
 
 
-    public static BaseFragment newInstance(String param1) {
-        BaseFragment fragment = new BaseFragment();
+    public static ScientificFragment newInstance(String param1, String param2) {
+        ScientificFragment fragment = new ScientificFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,16 +42,16 @@ public class BaseFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_base, container, false);
-    }
 
+        return inflater.inflate(R.layout.fragment_scientific, container, false);
+    }
 
     @Override
     public void onAttach(Context context) {
