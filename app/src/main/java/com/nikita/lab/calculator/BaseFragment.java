@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -62,7 +63,15 @@ public class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_base, container, false);
+        View view = inflater.inflate(R.layout.fragment_base, container, false);
+        if (BuildConfig.FLAVOR.equals("demo") || BuildConfig.FLAVOR.equals("demoDebug")) {
+            Button zeroB = view.findViewById(R.id.zero_button);
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams(zeroB.getLayoutParams());
+            params.columnSpec = GridLayout.spec(0, 2, 1);
+            params.rowSpec = GridLayout.spec(4, 1, 0.4f);
+            zeroB.setLayoutParams(params);
+        }
+        return view;
     }
 
 

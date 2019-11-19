@@ -106,6 +106,7 @@
 
     <Button
         style="@style/ButtonCommonStyle"
+        android:id="@+id/sciB"
         android:background="@drawable/button_background"
         android:onClick="OnSciClick"
         android:textColor="#FF5722"

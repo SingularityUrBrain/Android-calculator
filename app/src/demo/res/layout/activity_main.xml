@@ -40,12 +40,6 @@
         android:text="0"
         />
 
-    <FrameLayout
-        android:id="@+id/frm"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </FrameLayout>
-
     <fragment
         android:id="@+id/baseFragment"
         android:layout_columnSpan="4"

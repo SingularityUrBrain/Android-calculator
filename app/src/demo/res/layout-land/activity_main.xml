@@ -1,0 +1,52 @@
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="4"
+    android:rowCount="3"
+    tools:context=".MainActivity">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:background="@color/colorView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_rowWeight="0.6"
+        android:layout_columnSpan="4"
+        android:scrollbars="none">
+        <TextView
+            android:id="@+id/textView"
+            android:overScrollMode="never"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="end|bottom"
+            android:textAlignment="gravity"
+            android:textSize="30sp" />
+    </ScrollView>
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_columnSpan="4"
+        android:layout_height="0dp"
+        android:layout_rowWeight="0.8"
+        android:background="@color/colorView"
+        android:textAlignment="textEnd"
+        android:textColor="#000000"
+        android:textSize="35sp"
+        android:singleLine="true"
+        android:focusable="false"
+        android:inputType="none"
+        android:text="0"
+        />
+
+    <fragment
+        android:id="@+id/baseFragment"
+        android:layout_columnSpan="4"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_rowWeight="5"
+        android:name="com.nikita.lab.calculator.BaseFragment"
+        tools:layout="@layout/fragment_base" />
+
+</GridLayout>

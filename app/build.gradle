@@ -21,7 +21,7 @@ android {
     productFlavors {
         demo {
             applicationIdSuffix ".demo"
-            versionName "1.0-demo"
+            versionNameSuffix "-demo"
             dimension "version"
         }
         full {
@@ -32,6 +32,10 @@ android {
         demo {
             res.srcDirs = ['src/demo/res/']
             java.srcDirs = ['src/demo/java/']
+        }
+        full {
+            res.srcDirs = ['src/full/res/']
+            java.srcDirs = ['src/full/java/']
         }
     }
 }

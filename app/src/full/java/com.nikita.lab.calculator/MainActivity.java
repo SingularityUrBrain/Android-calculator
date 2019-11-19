@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
@@ -21,7 +23,10 @@ public class MainActivity extends AppCompatActivity {
     EditText editText;
     Button delB;
 
+    private SharedPreferences prefs;
+    public static final String APP_PREFERENCES = "settings";
     boolean isClear = true;
+    boolean isClearNum = false;
     String PADDING = "\n\n\n\n\n";
     StringBuilder result;
 
@@ -32,6 +37,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         init();
+        prefs = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        result = new StringBuilder(prefs.getString("result", "0"));
+        textView.setText(prefs.getString("textView", ""));
+        editText.setText(prefs.getString("editText", ""));
+        isClear = prefs.getBoolean("isClear", true);
+        isClearNum = prefs.getBoolean("isClearNum", false);
     }
     private void init(){
         result = new StringBuilder("0");
@@ -59,24 +70,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState){
-        savedInstanceState.putString("textView", textView.getText().toString());
-        savedInstanceState.putString("editText", editText.getText().toString());
-        savedInstanceState.putString("result", result.toString());
-        super.onSaveInstanceState(savedInstanceState);
-    }
-    //didn't work?
-    @Override
-    public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        String hist = savedInstanceState.getString("textView");
-        String expr = savedInstanceState.getString("editText");
-        result = new StringBuilder(savedInstanceState.getString("result", "0"));
-        textView.setText(hist);
-        editText.setText(expr);
+    public void onPause(){
+        super.onPause();
+        SharedPreferences.Editor ed = prefs.edit();
+        ed.putString("textView", textView.getText().toString());
+        ed.putString("editText", editText.getText().toString());
+        ed.putString("result", result.toString());
+        ed.putBoolean("isClear", isClear);
+        ed.putBoolean("isClearNum", isClearNum);
+        ed.apply();
     }
 
     public void OnOpClick(View view){
+        isClearNum = false;
+
         Button button = (Button)view;
         String op = button.getText().toString();
         switch (op) {
@@ -117,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 textView.append("\n");
                 StringBuilder res_text = new StringBuilder(result);
                 editText.setText(res_text.insert(0, "= "));
+                isClearNum = true;
                 break;
             default:
                 String op_eval;
@@ -175,10 +183,11 @@ public class MainActivity extends AppCompatActivity {
     public void OnNumberClick(View view){
         Button button = (Button)view;
         String num = button.getText().toString();
-        if (isClear){
+        if (isClear || isClearNum){
             textView.append(PADDING);
             editText.setText(num);
             isClear = false;
+            isClearNum = false;
             result.setLength(0);
         }
         else{
