@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
 
     TextView textView;
@@ -23,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences prefs;
     public static final String APP_PREFERENCES = "settings";
-    boolean isClear = true;
-    boolean isClearNum = false;
+    boolean isClear;
+    boolean isClearNum;
     String PADDING = "\n\n\n\n\n";
     StringBuilder result;
 
@@ -43,14 +45,11 @@ public class MainActivity extends AppCompatActivity {
         isClearNum = prefs.getBoolean("isClearNum", false);
     }
     private void init(){
-        result = new StringBuilder("0");
-
         delB = findViewById(R.id.delB);
         delB.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                EditText editText = findViewById(R.id.editText);
-                editText.setText("0");
+                editText.setText("");
                 isClear = true;
                 return true;
             }
@@ -79,6 +78,16 @@ public class MainActivity extends AppCompatActivity {
         ed.apply();
     }
 
+    boolean isPIE(StringBuilder str){
+        return (str.length() > 0 && str.charAt(str.length() - 1) == 'e')
+                || (str.length() > 1 && str.charAt(str.length() - 2) == 'p'
+                        && str.charAt(str.length() - 1) == 'i');
+    }
+    boolean isPIE(Editable str){
+        return (str.length() > 0 && (str.charAt(str.length() - 1) == 'e'
+                || str.charAt(str.length() - 1) == 'π'));
+    }
+
     public void OnOpClick(View view){
         isClearNum = false;
 
@@ -88,44 +97,59 @@ public class MainActivity extends AppCompatActivity {
             case "C":
                 textView.setText("");
                 textView.append(PADDING);
-                editText.setText("0");
+                editText.setText("");
                 result.setLength(0);
-                result.append("0");
                 isClear = true;
                 break;
             case "⌫":
                 Editable txt = editText.getText();
                 if (editText.length() > 0) {
-                    editText.setText(txt.delete(txt.length() - 1, txt.length()));
+                    // del sci functions by 1 click
+                    do {
+                        editText.setText(txt.delete(txt.length() - 1, txt.length()));
+                    }
+                    while (txt.length() > 0 && Character.isLetter(txt.charAt(txt.length() - 1))
+                            && !isPIE(txt));
                 }
                 else
-                    editText.setText("0");
-                if (result.length() > 0)
-                    result.setLength(result.length() - 1);
-                else {
-                    result.append("0");
                     isClear = true;
+                if (result.length() > 0) {
+                    // del sci functions by 1 click
+                    do {
+                        if (result.length() > 5 && result.indexOf("log10(") == result.length() - 6)
+                            result.setLength(result.length() - 6);
+                        else
+                            result.setLength(result.length() - 1);
+                    }
+                    while (result.length() > 0 && (Character.isLetter(result.charAt(result.length() - 1)))
+                            && !isPIE(result));
                 }
+                else
+                    isClear = true;
                 return;
             case "=":
+                // append ) for convenience
                 if(result.indexOf("(") != -1 && result.indexOf(")") == -1)
                     result.append(")");
                 double res = Calculator.exec(result.toString());
                 if (Double.isNaN(res))
                 {
-                    result = new StringBuilder("0");
-                    editText.setText("Invalid expression");
+                    editText.setText("");
+                    result.setLength(0);
+                    textView.append("Invalid expression");
                 }
-                else{
+                else {
+                    // check if int
                     if(res % 1 == 0)
                         result = new StringBuilder(Integer.toString((int)res));
                     else
                         result = new StringBuilder(Double.toString(res));
+
+                    textView.append(editText.getText());
+                    StringBuilder res_text = new StringBuilder(result);
+                    editText.setText(res_text.insert(0, "= "));
                 }
-                textView.append(editText.getText());
                 textView.append("\n");
-                StringBuilder res_text = new StringBuilder(result);
-                editText.setText(res_text.insert(0, "= "));
                 isClearNum = true;
                 break;
             default:
@@ -155,31 +179,56 @@ public class MainActivity extends AppCompatActivity {
                     case "ln":
                         op_eval = op = "ln(";
                         break;
-                    case "log":
-                        op_eval = op = "log10(";
+                    case "lg":
+                        op_eval = "log10(";
+                        op = "lg(";
                         break;
                     case "√":
-                        op_eval = op = "sqrt(";
+                        op_eval = "sqrt(";
+                        op = "√(";
                         break;
                     case "\uD835\uDF0B":
+                        op = "π";
                         op_eval = "pi";
                         break;
                     default:
                         op_eval = op;
                         break;
                 }
-                // TODO: change sign if sign in editText now else add sign
-                if (isClear)
+                // change operation if already exist
+                if (!isClear
+                        && result.length() > 0
+                        && op_eval.length() < 2 && !op.equals("(")
+                        && result.charAt(result.length() - 1) != '(')
                 {
-                    editText.setText(op);
-                    result.setLength(0);
+                    if(Character.isDigit(result.charAt(result.length() - 1))
+                            || result.charAt(result.length() - 1) == ')'
+                            || isPIE(result)
+                            || result.charAt(result.length() - 1) == '!') {
+                        editText.append(op);
+                        result.append(op_eval);
+                    }
+                    else {
+                        if (result.length() > 1){
+                            Editable txt_sign = editText.getText();
+                            editText.setText(txt_sign.replace(txt_sign.length() - 1, txt_sign.length(), op));
+                            result.replace(result.length() - 1, result.length(), op_eval);
+                        }
+                    }
+                }
+                else if(op_eval.length() > 1 || op.equals("(") || op_eval.equals("-")) {
                     isClear = false;
-                }
-                else
-                {
+                    if (result.length() > 0
+                            && (Character.isDigit(result.charAt(result.length() - 1))
+                                || result.charAt(result.length() - 1) == ')'
+                                || isPIE(result)))
+                    {
+                        result.append("*");
+                        editText.append("×");
+                    }
                     editText.append(op);
+                    result.append(op_eval);
                 }
-                result.append(op_eval);
                 break;
         }
 
@@ -195,6 +244,13 @@ public class MainActivity extends AppCompatActivity {
             isClearNum = false;
             result.setLength(0);
         }
+        else if(result.length() > 0 && (isPIE(result) || result.charAt(result.length() - 1) == ')'
+                || (num.equals("e") && Character.isDigit(result.charAt(result.length() - 1)))))
+        {
+            result.append("*");
+            editText.append("×");
+            editText.append(num);
+        }
         else{
             editText.append(num);
         }
@@ -209,10 +265,9 @@ public class MainActivity extends AppCompatActivity {
             transaction.add(R.id.frm, sciFragment);
         }
         else {
-            transaction.remove(getSupportFragmentManager().findFragmentById(R.id.frm));
+            transaction.remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentById(R.id.frm)));
         }
         transaction.commit();
-
 
     }
 }

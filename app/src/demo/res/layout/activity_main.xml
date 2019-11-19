@@ -36,8 +36,9 @@
         android:textSize="35sp"
         android:singleLine="true"
         android:focusable="false"
-        android:inputType="none"
-        android:text="0"
+        android:inputType="none|textNoSuggestions"
+        android:importantForAutofill="no"
+        android:hint="@string/_0"
         />
 
     <fragment

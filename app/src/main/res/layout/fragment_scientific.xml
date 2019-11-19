@@ -11,72 +11,71 @@
         style="@style/ButtonCommonStyle"
         android:onClick="OnOpClick"
         android:background="@drawable/button_background"
-        android:text="sin"
+        android:text="@string/sin"
         android:textAllCaps="false"/>
     <Button
         style="@style/ButtonCommonStyle"
         android:onClick="OnOpClick"
         android:background="@drawable/button_background"
-        android:text="cos"
+        android:text="@string/cos"
         android:textAllCaps="false"/>
     <Button
         style="@style/ButtonCommonStyle"
         android:onClick="OnOpClick"
         android:background="@drawable/button_background"
-        android:text="tan"
+        android:text="@string/tan"
         android:textAllCaps="false"/>
     <Button
         style="@style/ButtonCommonStyle"
         android:onClick="OnOpClick"
         android:background="@drawable/button_background"
-        android:text="𝜋"
+        android:text="@string/pi"
         android:textAllCaps="false"/>
     <Button
         style="@style/ButtonCommonStyle"
         android:onClick="OnOpClick"
         android:background="@drawable/button_background"
-        android:text="ln"
+        android:text="@string/ln"
+        android:textAllCaps="false"/>
+    <Button
+        style="@style/ButtonCommonStyle"
+        android:onClick="OnNumberClick"
+        android:background="@drawable/button_background"
+        android:text="@string/e"
         android:textAllCaps="false"/>
     <Button
         style="@style/ButtonCommonStyle"
         android:onClick="OnOpClick"
         android:background="@drawable/button_background"
-        android:text="e"
+        android:text="@string/left_bracket" />
+    <Button
+        style="@style/ButtonCommonStyle"
+        android:onClick="OnOpClick"
+        android:background="@drawable/button_background"
+        android:text="@string/right_bracket" />
+    <Button
+        style="@style/ButtonCommonStyle"
+        android:onClick="OnOpClick"
+        android:background="@drawable/button_background"
+        android:text="@string/lg"
         android:textAllCaps="false"/>
     <Button
         style="@style/ButtonCommonStyle"
         android:onClick="OnOpClick"
         android:background="@drawable/button_background"
-        android:text="(" />
-    <Button
-        style="@style/ButtonCommonStyle"
-        android:onClick="OnOpClick"
-        android:background="@drawable/button_background"
-        android:text=")" />
-    <Button
-        style="@style/ButtonCommonStyle"
-        android:onClick="OnOpClick"
-        android:background="@drawable/button_background"
-        android:text="log"
+        android:text="@string/pow"
         android:textAllCaps="false"/>
     <Button
         style="@style/ButtonCommonStyle"
         android:onClick="OnOpClick"
         android:background="@drawable/button_background"
-        android:text="^"
+        android:text="@string/sqrt"
         android:textAllCaps="false"/>
     <Button
         style="@style/ButtonCommonStyle"
         android:onClick="OnOpClick"
         android:background="@drawable/button_background"
-        android:text="√"
+        android:text="@string/fact"
         android:textAllCaps="false"/>
-    <Button
-        style="@style/ButtonCommonStyle"
-        android:onClick="OnOpClick"
-        android:background="@drawable/button_background"
-        android:text="!"
-        android:textAllCaps="false"/>
-
 
 </GridLayout>

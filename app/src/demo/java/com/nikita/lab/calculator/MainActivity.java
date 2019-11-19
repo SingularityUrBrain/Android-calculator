@@ -1,10 +1,7 @@
 package com.nikita.lab.calculator;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
+import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,15 +45,14 @@ public class MainActivity extends AppCompatActivity {
         delB.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                EditText editText = findViewById(R.id.editText);
-                editText.setText("0");
+                editText.setText("");
+                isClear = true;
                 return true;
             }
         });
         textView = findViewById(R.id.textView);
         editText = findViewById(R.id.editText);
         mainScrollView = findViewById(R.id.scrollView);
-
         mainScrollView.post(new Runnable() {
             @Override
             public void run() {
@@ -78,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
         ed.apply();
     }
 
-
     public void OnOpClick(View view){
         isClearNum = false;
 
@@ -88,9 +82,8 @@ public class MainActivity extends AppCompatActivity {
             case "C":
                 textView.setText("");
                 textView.append(PADDING);
-                editText.setText("0");
+                editText.setText("");
                 result.setLength(0);
-                result.append("0");
                 isClear = true;
                 break;
             case "⌫":
@@ -99,33 +92,32 @@ public class MainActivity extends AppCompatActivity {
                     editText.setText(txt.delete(txt.length() - 1, txt.length()));
                 }
                 else
-                    editText.setText("0");
+                    isClear = true;
                 if (result.length() > 0)
                     result.setLength(result.length() - 1);
-                else {
-                    result.append("0");
+                else
                     isClear = true;
-                }
                 return;
             case "=":
-                if(result.indexOf("(") != -1 && result.indexOf(")") == -1)
-                    result.append(")");
                 double res = Calculator.exec(result.toString());
                 if (Double.isNaN(res))
                 {
-                    result = new StringBuilder("0");
-                    editText.setText("Invalid expression");
+                    editText.setText("");
+                    result.setLength(0);
+                    textView.append("Invalid expression");
                 }
                 else {
+                    // check if int
                     if(res % 1 == 0)
                         result = new StringBuilder(Integer.toString((int)res));
                     else
                         result = new StringBuilder(Double.toString(res));
+
+                    textView.append(editText.getText());
+                    StringBuilder res_text = new StringBuilder(result);
+                    editText.setText(res_text.insert(0, "= "));
                 }
-                textView.append(editText.getText());
                 textView.append("\n");
-                StringBuilder res_text = new StringBuilder(result);
-                editText.setText(res_text.insert(0, "= "));
                 isClearNum = true;
                 break;
             default:
@@ -147,18 +139,26 @@ public class MainActivity extends AppCompatActivity {
                         op_eval = op;
                         break;
                 }
-                // TODO: change sign if sign in editText now else add sign
-                if (isClear)
-                {
-                    editText.setText(op);
-                    result.setLength(0);
+                // change operation if already exist
+                if (!isClear && result.length() > 0) {
+                    if(Character.isDigit(result.charAt(result.length()-1))) {
+                        editText.append(op);
+                        result.append(op_eval);
+                    }
+                    else {
+                        if (result.length()>1)
+                        {
+                            Editable txt_sign = editText.getText();
+                            editText.setText(txt_sign.replace(txt_sign.length() - 1, txt_sign.length(), op));
+                            result.replace(result.length() - 1, result.length(), op_eval);
+                        }
+                    }
+                }
+                else if (op_eval.equals("-")){
                     isClear = false;
-                }
-                else
-                {
                     editText.append(op);
+                    result.append(op_eval);
                 }
-                result.append(op_eval);
                 break;
         }
 
