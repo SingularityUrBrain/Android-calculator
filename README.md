@@ -6,3 +6,5 @@
 4. Each set of functions (numbers + basic functions and scientific functions) should be in separate fragments.
 5. For landscape device orientation app should always be in scientific mode.
 6. Create a 'demo' build flavor with only basic functions available for both screen orientations. User should be able to have both 'demo' and 'full' versions on device at the same time.
+
+![](./view.png)
