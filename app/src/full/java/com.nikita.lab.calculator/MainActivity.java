@@ -23,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
     EditText editText;
     Button delB;
 
-    private SharedPreferences prefs;
-    public static final String APP_PREFERENCES = "settings";
+    SharedPreferences prefs;
+    static final String APP_PREFERENCES = "settings";
     boolean isClear;
     boolean isClearNum;
     String PADDING = "\n\n\n\n\n";
